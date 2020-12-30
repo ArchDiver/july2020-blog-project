@@ -13,7 +13,6 @@ from flask_login import login_required, login_user, current_user, logout_user
 # home route
 @app.route('/')
 def home(): 
-
     posts = Post.query.all()
     return render_template("home.html", posts=posts)
 
@@ -28,6 +27,8 @@ def register():
         password = form.password.data
         email = form.email.data
         print("\n",username,password,email)
+        # check_user = User.query.filter_by(email=email)
+        # if check_user 
         # Create an instance of User
         user = User(username,email,password)
         # Open and insert into database
@@ -58,7 +59,8 @@ def createposts():
         db.session.add(post)
         db.session.commit()
         return redirect(url_for('createposts'))
-    return render_template('createposts.html', form=form)
+    posts = Post.query.all()
+    return render_template('createposts.html', form=form, posts=posts)
 
 @app.route('/posts/<int:post_id>')
 @login_required
